@@ -7,8 +7,8 @@
 
 const app = {
   app_id: 113537,
-  title: 'My Awesome E-Com Plus App',
-  slug: 'my-awesome-app',
+  title: 'Pagaleve Pix Parcelado',
+  slug: 'pagaleve-pix-parcelado',
   type: 'external',
   state: 'active',
   authentication: true,
@@ -34,13 +34,13 @@ const app = {
      * Triggered when listing payments, must return available payment methods.
      * Start editing `routes/ecom/modules/list-payments.js`
      */
-    // list_payments:        { enabled: true },
+    list_payments:        { enabled: true },
 
     /**
      * Triggered when order is being closed, must create payment transaction and return info.
      * Start editing `routes/ecom/modules/create-transaction.js`
      */
-    // create_transaction:   { enabled: true },
+    create_transaction:   { enabled: true },
   },
 
   /**
@@ -106,8 +106,11 @@ const app = {
     ],
     'orders/payments_history': [
       // 'GET',           // List/read order payments history events
-      // 'POST',          // Create payments history entry with new status
+      'POST',          // Create payments history entry with new status
       // 'DELETE',        // Delete payments history entry
+    ],
+    'orders/transactions': [
+      'PATCH'
     ],
 
     /**
@@ -138,37 +141,24 @@ const app = {
   },
 
   admin_settings: {
-    /**
-     * JSON schema based fields to be configured by merchant and saved to app `data` / `hidden_data`, such as:
-
-     webhook_uri: {
-       schema: {
-         type: 'string',
-         maxLength: 255,
-         format: 'uri',
-         title: 'Notifications URI',
-         description: 'Unique notifications URI available on your Custom App dashboard'
-       },
-       hide: true
-     },
-     token: {
-       schema: {
-         type: 'string',
-         maxLength: 50,
-         title: 'App token'
-       },
-       hide: true
-     },
-     opt_in: {
-       schema: {
-         type: 'boolean',
-         default: false,
-         title: 'Some config option'
-       },
-       hide: false
-     },
-
-     */
+    username: {
+      schema: {
+        type: 'string',
+        maxLength: 64,
+        title: 'Username',
+        description: 'Username utilizado para entrar na Pagaleve'
+      },
+      hide: true
+    },
+    password: {
+      schema: {
+        type: 'string',
+        maxLength: 64,
+        title: 'Senha',
+        description: 'Senha utilizada para entrar na Pagaleve'
+      },
+      hide: true
+    }
   }
 }
 
