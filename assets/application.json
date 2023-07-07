@@ -1,11 +1,20 @@
 {
-  "app_id": 9000,
-  "title": "My Awesome E-Com Plus App",
-  "slug": "my-awesome-ecom-plus-app",
+  "app_id": 113537,
+  "title": "Pagaleve Pix Parcelado",
+  "slug": "pagaleve-pix-parcelado",
   "type": "external",
   "state": "active",
   "authentication": true,
-  "modules": {},
+  "modules": {
+    "list_payments": {
+      "enabled": true,
+      "endpoint": "https://us-central1-ecom-pagaleve.cloudfunctions.net/app/ecom/modules/list-payments"
+    },
+    "create_transaction": {
+      "enabled": true,
+      "endpoint": "https://us-central1-ecom-pagaleve.cloudfunctions.net/app/ecom/modules/create-transaction"
+    }
+  },
   "auth_scope": {
     "stores/me": [
       "GET"
@@ -20,12 +29,37 @@
     "orders": [],
     "carts": [],
     "orders/fulfillments": [],
-    "orders/payments_history": [],
+    "orders/payments_history": [
+      "POST"
+    ],
+    "orders/transactions": [
+      "PATCH"
+    ],
     "products/quantity": [],
     "products/variations/quantity": [],
     "products/price": [],
     "products/variations/price": []
   },
-  "auth_callback_uri": "https://us-central1-ecom-app-boilerplate.cloudfunctions.net/app/ecom/auth-callback",
+  "admin_settings": {
+    "username": {
+      "schema": {
+        "type": "string",
+        "maxLength": 64,
+        "title": "Username",
+        "description": "Username utilizado para entrar na Pagaleve"
+      },
+      "hide": true
+    },
+    "password": {
+      "schema": {
+        "type": "string",
+        "maxLength": 64,
+        "title": "Senha",
+        "description": "Senha utilizada para entrar na Pagaleve"
+      },
+      "hide": true
+    }
+  },
+  "auth_callback_uri": "https://us-central1-ecom-pagaleve.cloudfunctions.net/app/ecom/auth-callback",
   "version": "1.0.0"
 }
