@@ -13,8 +13,8 @@ module.exports = function (username, password, isSandbox, storeId) {
   }
 
   this.preparing = new Promise((resolve, reject) => {
-    const authenticate = (accessToken, isSandbox) => {
-      self.axios = createAxios(accessToken, isSandbox)
+    const authenticate = (token, isSandbox) => {
+      self.axios = createAxios(token, isSandbox)
       resolve(self)
     }
 
@@ -23,7 +23,7 @@ module.exports = function (username, password, isSandbox, storeId) {
       auth(username, password, storeId, isSandbox)
         .then((data) => {
           console.log('> Pagaleve token => ', data)
-          authenticate(data.access_token, isSandbox)
+          authenticate(data.token, isSandbox)
           if (documentRef) {
             documentRef.set({
               ...data,
@@ -40,9 +40,9 @@ module.exports = function (username, password, isSandbox, storeId) {
       documentRef.get()
         .then((documentSnapshot) => {
           if (documentSnapshot.exists &&
-            Date.now() - documentSnapshot.updateTime.toDate().getTime() <= 50 * 60 * 1000 // access token expires in 18 hours
+            Date.now() - documentSnapshot.updateTime.toDate().getTime() <= 50 * 60 * 1000 // token expires in 50 min
           ) {
-            authenticate(documentSnapshot.get('access_token'), isSandbox)
+            authenticate(documentSnapshot.get('token'), isSandbox)
           } else {
             handleAuth(isSandbox)
           }
