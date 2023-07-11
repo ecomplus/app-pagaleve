@@ -85,7 +85,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
         sku: item.sku,
         quantity: item.quantity,
         price: Math.floor((item.final_price || item.price)),
-        url: encodeURIComponent(`https://${params.domain}/search?term=${item.name}`),
+        url: `https://${params.domain}`,
         reference: item.product_id,
         image: objImg && objImg.url ? objImg.url : `https://${params.domain}`
       })
