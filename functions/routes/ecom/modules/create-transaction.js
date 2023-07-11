@@ -79,14 +79,15 @@ exports.post = ({ appSdk, admin }, req, res) => {
 
   items.forEach(item => {
     if (item.quantity > 0) {
+      const objImg = ecomUtils.img(item)
       pagaleveTransaction.order.items.push({
         name: item.name || item.sku,
         sku: item.sku,
         quantity: item.quantity,
         price: Math.floor((item.final_price || item.price)),
-        url: `https://${params.domain}/search?term=${item.name}`,
+        url: encodeURIComponent(`https://${params.domain}/search?term=${item.name}`),
         reference: item.product_id,
-        image: ecomUtils.img(item) || `https://${params.domain}`
+        image: objImg && objImg.url ? objImg.url : `https://${params.domain}`
       })
     }
   })
