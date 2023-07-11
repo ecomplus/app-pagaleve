@@ -61,8 +61,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const pagaleveTransaction = {
     cancel_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
     approve_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
-    webhook_url: `${baseUri}/pagaleve/webhook?storeId=${storeId}`,
-    currency: params.currency_id || 'BRL'
+    webhook_url: `${baseUri}/pagaleve/webhook?storeId=${storeId}`
   }
 
   pagaleveTransaction.order = {
