@@ -127,13 +127,13 @@ exports.post = ({ appSdk, admin }, req, res) => {
     })
     .catch(error => {
       // try to debug request error
-      console.error(error)
       const errCode = 'Pagaleve_TRANSACTION_ERR'
+      console.log(errCode)
       let { message } = error
       const err = new Error(`${errCode} #${storeId} - ${orderId} => ${message}`)
       if (error.response) {
-        console.log(error.response)
         const { status, data } = error.response
+        console.log('Pagaleve error:', status, JSON.stringify(data))
         if (status !== 401 && status !== 403) {
           err.payment = JSON.stringify(transactionLink)
           err.status = status
