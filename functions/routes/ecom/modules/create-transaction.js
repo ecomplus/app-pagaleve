@@ -28,6 +28,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
 
   // setup required `transaction` response object
   const orderId = params.order_id
+  const orderNumber = params.order_number
   const { amount, buyer, to, items } = params
 
   const transactionLink = {
@@ -46,49 +47,65 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const finalAmount = amount.total
   const finalFreight = amount.freight
 
+  const parseAddress = to => ({
+    name: to.name,
+    city: to.city,
+    state: to.province_code,
+    street: to.street,
+    zip_code: to.zip,
+    neighborhood: to.borough,
+    number: String(to.number) || 's/n',
+    complement: to.complement || undefined
+  })
+
   const pagaleveTransaction = {
-    orderId,
-    totalAmount: Math.floor(finalAmount),
-    shippingAmount: Math.floor(finalFreight) || 0,
+    cancel_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
+    approve_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
+    webhook_url: `${baseUri}/pagaleve/webhook?storeId=${storeId}`,
     currency: params.currency_id || 'BRL'
   }
 
-  pagaleveTransaction.items = []
+  pagaleveTransaction.order = {
+    reference: orderId,
+    description: `Order from E-Com Plus ${orderNumber}`,
+    shipping: {
+      amount: Math.floor(finalFreight) || 0,
+      address: parseAddress(to)
+    },
+    amount: Math.floor(finalAmount),
+    items: [],
+    timestamp: new Date().toISOString(),
+    type: 'ORDINARY'
+  }
+
   items.forEach(item => {
     if (item.quantity > 0) {
-      pagaleveTransaction.items.push({
-        sku: item.sku,
+      pagaleveTransaction.order.items.push({
         name: item.name || item.sku,
-        unitPrice: Math.floor((item.final_price || item.price)),
-        quantity: item.quantity
+        sku: item.sku,
+        quantity: item.quantity,
+        price: Math.floor((item.final_price || item.price)),
+        url: `https://${params.domain}/search?term=${item.name}`,
+        reference: item.product_id,
+        image: ecomUtils.img(item) || `https://${params.domain}`
       })
     }
   })
-  const parseAddress = to => ({
-    lineOne: ecomUtils.lineAddress(to),
-    city: to.city,
-    country: to.country_code ? to.country_code.toUpperCase() : 'BR'
-  })
 
-  pagaleveTransaction.client = {
-    idType: buyer.registry_type === 'j' ? 'CNPJ' : 'CPF',
-    idNumber: String(buyer.doc_number),
-    firstName: buyer.fullname.replace(/\s.*/, ''),
-    lastName: buyer.fullname.replace(/[^\s]+\s/, ''),
+  pagaleveTransaction.shopper = {
+    cpf: String(buyer.doc_number),
+    first_name: buyer.fullname.replace(/\s.*/, ''),
+    last_name: buyer.fullname.replace(/[^\s]+\s/, ''),
     email: buyer.email,
-    cellphone: buyer.phone.number,
-    cellphoneCountryCode: `+${(buyer.phone.country_code || '55')}`,
-    address: parseAddress(to)
+    phone: buyer.phone.number,
+    billing_address: parseAddress(to) 
   }
 
-  pagaleveTransaction.shippingAddress = parseAddress(to)
-  pagaleveTransaction.billingAddress = params.billing_address
-    ? parseAddress(params.billing_address)
-    : pagaleveTransaction.client.address
-
-  pagaleveTransaction.allyUrlRedirection = {
-    redirectionUrl: `https://${params.domain}/app/#/order/${orderId}`,
-    callbackUrl: `${baseUri}/pagaleve/webhook?storeId=${storeId}`
+  const birthDate = buyer.birth_date
+  if (birthDate && birthDate.year && birthDate.day) {
+    pagaleveTransaction.birth_date = `${birthDate.year}-` +
+      `${birthDate.month.toString().padStart(2, '0')}-` +
+      birthDate.day.toString().padStart(2, '0')
   }
 
   pagaleveAxios.preparing
@@ -99,11 +116,11 @@ exports.post = ({ appSdk, admin }, req, res) => {
       const validateStatus = function (status) {
         return status >= 200 && status <= 301
       }
-      return axios.post('/v1/online-applications', pagaleveTransaction, { maxRedirects: 0, validateStatus })
+      return axios.post('/v1/checkouts', pagaleveTransaction, { maxRedirects: 0, validateStatus })
     })
-    .then((data) => {
+    .then(({ data }) => {
       console.log('>> Created transaction <<')
-      transactionLink.payment_link = data.headers.location
+      transactionLink.payment_link = data.redirect_checkout_url
       res.send({
         redirect_to_payment: true,
         transaction: transactionLink

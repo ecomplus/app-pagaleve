@@ -74,28 +74,21 @@ exports.post = async ({ appSdk }, req, res) => {
         intermediator
       }
       console.log('>>> test:', JSON.stringify(gateway))
-      if (discount && discount.value > 0 && (!amount.discount || discount.cumulative_discount !== false)) {
-        gateway.discount = {
-          apply_at: discount.apply_at,
-          type: discount.type,
-          value: discount.value
-        }
-        if (discount.apply_at !== 'freight') {
-          // set as default discount option
-          response.discount_option = {
-            ...gateway.discount,
-            label: `${label} `
-          }
-        }
 
-        if (discount.min_amount) {
-          // check amount value to apply discount
-          if (amount.total < discount.min_amount) {
-            delete gateway.discount
+      if (discount && discount.value > 0) {
+        if (discount.apply_at !== 'freight') {
+          // default discount option
+          const { value } = discount
+          response.discount_option = {
+            label,
+            value
           }
-          if (response.discount_option) {
-            response.discount_option.min_amount = discount.min_amount
-          }
+          // specify the discount type and min amount is optional
+          ;['type', 'min_amount'].forEach(prop => {
+            if (discount[prop]) {
+              response.discount_option[prop] = discount[prop]
+            }
+          })
         }
       }
       response.payment_gateways.push(gateway)
