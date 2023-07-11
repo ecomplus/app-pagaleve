@@ -58,6 +58,95 @@
         "description": "Senha utilizada para entrar na Pagaleve"
       },
       "hide": true
+    },
+    "discount": {
+      "schema": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "apply_at": {
+            "type": "string",
+            "enum": [
+              "total",
+              "subtotal",
+              "freight"
+            ],
+            "default": "subtotal",
+            "title": "Aplicar desconto em",
+            "description": "Em qual valor o desconto deverá ser aplicado no checkout"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "percentage",
+              "fixed"
+            ],
+            "default": "percentage",
+            "title": "Tipo de desconto",
+            "description": "Desconto com valor percentual ou fixo"
+          },
+          "value": {
+            "type": "number",
+            "minimum": -99999999,
+            "maximum": 99999999,
+            "title": "Valor do desconto",
+            "description": "Valor percentual ou fixo a ser descontado, dependendo to tipo configurado"
+          }
+        },
+        "title": "Desconto",
+        "description": "Desconto a ser aplicado para pagamentos via Pagaleve"
+      },
+      "hide": false
+    },
+    "min_amount": {
+      "schema": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 99999999,
+        "default": 1,
+        "title": "Mínimo para mostrar formas de pagamento"
+      },
+      "hide": true
+    },
+    "payment_link": {
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "disable": {
+            "type": "boolean",
+            "default": true,
+            "title": "Desabilitar link de pagamento",
+            "description": "Desabilitar pagamento com link de pagamento"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Rótulo",
+            "description": "Nome da forma de pagamento exibido para os clientes",
+            "default": "Link Pagamento Pagaleve"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 1000,
+            "title": "Descrição",
+            "description": "Texto auxiliar sobre a forma de pagamento, pode conter tags HTML"
+          },
+          "icon": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "uri",
+            "title": "Ícone",
+            "description": "Ícone customizado para a forma de pagamento, URL da imagem"
+          }
+        },
+        "title": "Configurações adicionais",
+        "description": "Configurações adicionais para forma de pagamento via Pagaleve"
+      },
+      "hide": false
     }
   },
   "auth_callback_uri": "https://us-central1-ecom-pagaleve.cloudfunctions.net/app/ecom/auth-callback",
