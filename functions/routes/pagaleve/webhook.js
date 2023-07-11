@@ -11,17 +11,20 @@ const findOrderById = (appSdk, storeId, auth, orderId) => {
 }
 
 const parseStatusToEcom = (pagaleveTransactionStatus) => {
-  switch (pagaleveTransactionStatus) {
-    case 'PENDING':
+  switch (pagaleveTransactionStatus.toLowerCase()) {
+    case 'pending':
+    case 'new':
+    case 'accepted':
       return 'pending'
 
-    case 'APPROVED':
+    case 'authorized':
+    case 'completed':
       return 'paid'
 
-    case 'REJECTED':
+    case 'expired':
     case 'DECLINED':
     case 'ABANDONED':
-    case 'CANCELED':
+    case 'canceled':
       return 'voided'
   }
   return 'unknown' // INTERNAL_ERROR
