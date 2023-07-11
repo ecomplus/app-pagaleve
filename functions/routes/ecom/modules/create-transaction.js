@@ -122,7 +122,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
       })
     })
     .then(({ data }) => {
-      console.log('>> Created transaction <<')
+      console.log('>> Created transaction <<', JSON.stringify(data))
       transactionLink.payment_link = data.redirect_checkout_url
       res.send({
         redirect_to_payment: true,
