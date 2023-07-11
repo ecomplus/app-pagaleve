@@ -116,7 +116,10 @@ exports.post = ({ appSdk, admin }, req, res) => {
       const validateStatus = function (status) {
         return status >= 200 && status <= 301
       }
-      return axios.post('/v1/checkouts', pagaleveTransaction, { maxRedirects: 0, validateStatus })
+      return axios.post('/v1/checkouts', pagaleveTransaction, { 
+        maxRedirects: 0,
+        validateStatus
+      })
     })
     .then(({ data }) => {
       console.log('>> Created transaction <<')
