@@ -1,7 +1,10 @@
 const axios = require('axios')
+const ecomUtils = require('@ecomplus/utils')
+
 module.exports = (token, isSandbox) => {
   const headers = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Idempotency-Key': ecomUtils.randomObjectId()
   }
   
   const baseURL = `${isSandbox ? 'https://sandbox-api.pagaleve.io' : 'https://api.pagaleve.com.br'}`

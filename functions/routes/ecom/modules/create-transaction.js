@@ -85,7 +85,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
         sku: item.sku,
         quantity: item.quantity,
         price: Math.floor((item.final_price || item.price)),
-        url: encodeURIComponent(`https://${params.domain}/search?term=${item.name}`),
+        url: `https://${params.domain}`,
         reference: item.product_id,
         image: objImg && objImg.url ? objImg.url : `https://${params.domain}`
       })
@@ -116,11 +116,14 @@ exports.post = ({ appSdk, admin }, req, res) => {
       const validateStatus = function (status) {
         return status >= 200 && status <= 301
       }
-      return axios.post('/v1/checkouts', pagaleveTransaction, { maxRedirects: 0, validateStatus })
+      return axios.post('/v1/checkouts', pagaleveTransaction, { 
+        maxRedirects: 0,
+        validateStatus
+      })
     })
     .then(({ data }) => {
-      console.log('>> Created transaction <<')
-      transactionLink.payment_link = data.redirect_checkout_url
+      console.log('>> Created transaction <<', JSON.stringify(data))
+      transactionLink.payment_link = data.redirect_url || data.checkout_url
       res.send({
         redirect_to_payment: true,
         transaction: transactionLink
