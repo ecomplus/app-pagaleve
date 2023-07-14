@@ -1,5 +1,5 @@
 const getAppData = require('./../../lib/store-api/get-app-data')
-const PagaLeveAxios = require('../../../lib/pagaleve/create-access')
+const PagaLeveAxios = require('./../../lib/pagaleve/create-access')
 
 const findOrderById = (appSdk, storeId, auth, orderId) => {
   return new Promise((resolve, reject) => {
