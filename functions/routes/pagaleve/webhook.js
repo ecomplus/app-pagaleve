@@ -1,3 +1,6 @@
+const getAppData = require('./../../lib/store-api/get-app-data')
+const PagaLeveAxios = require('../../../lib/pagaleve/create-access')
+
 const findOrderById = (appSdk, storeId, auth, orderId) => {
   return new Promise((resolve, reject) => {
     appSdk.apiRequest(storeId, `/orders/${orderId}.json`, 'GET', null, auth)
@@ -38,7 +41,8 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const {
     id,
     orderReference,
-    state
+    state,
+    amount
   } = body
   console.log('>> Store: ', storeId, ' body: ', JSON.stringify(body), ' <<')
   if (storeId > 100) {
@@ -81,6 +85,35 @@ exports.post = ({ appSdk, admin }, req, res) => {
             )
             if (responseUpdateTransaction) {
               console.log('> UPDATE Transaction OK')
+            }
+            if (state.toLowerCase() === 'authorized') {
+              getAppData({ appSdk, storeId, auth })
+                .then(appData => {
+                  const pagaleveAxios = new PagaLeveAxios(appData.username, appData.password, true, storeId)
+                  pagaleveAxios.preparing
+                    .then(() => {
+                      const { axios } = pagaleveAxios
+                      let body = {
+                        checkout_id: id,
+                        currency: 'BRL',
+                        amount: amount * 100,
+                        intent: 'AUTH'
+                      }
+                      console.log('> SendPayment Pagaleve: ', JSON.stringify(body), ' <<')
+                      // https://axios-http.com/ptbr/docs/req_config
+                      const validateStatus = function (status) {
+                        return status >= 200 && status <= 301
+                      }
+                      return axios.post('/v1/payments', body, { 
+                        maxRedirects: 0,
+                        validateStatus
+                      })
+                    })
+                    .then(({ data }) => {
+                      console.log('>> Created payment <<', JSON.stringify(data))
+                    })
+                    .catch(error => {console.log('erro', error)})
+                })
             }
           }
         } catch (error) {
