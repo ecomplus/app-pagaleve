@@ -97,7 +97,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
                         checkout_id: id,
                         currency: 'BRL',
                         amount: amount * 100,
-                        intent: 'AUTH'
+                        intent: 'CAPTURE'
                       }
                       console.log('> SendPayment Pagaleve: ', JSON.stringify(body), ' <<')
                       // https://axios-http.com/ptbr/docs/req_config

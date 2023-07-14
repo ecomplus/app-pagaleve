@@ -124,10 +124,11 @@ exports.post = ({ appSdk, admin }, req, res) => {
     .then(({ data }) => {
       console.log('>> Created transaction <<', JSON.stringify(data))
       transactionLink.payment_link = data.redirect_url || data.checkout_url
-      res.send({
+      /* res.send({
         redirect_to_payment: true,
         transaction: transactionLink
-      })
+      }) */
+      res.redirect(200, data.redirect_url);
     })
     .catch(error => {
       // try to debug request error
