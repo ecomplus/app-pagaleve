@@ -31,6 +31,8 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const orderNumber = params.order_number
   const { amount, buyer, to, items } = params
 
+  const isPix = params.payment_method.code === 'account_deposit'
+
   const transactionLink = {
     intermediator: {
       payment_method: params.payment_method
@@ -61,7 +63,8 @@ exports.post = ({ appSdk, admin }, req, res) => {
   const pagaleveTransaction = {
     cancel_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
     approve_url:`https://${params.domain}/app/#/order/${orderNumber}/${orderId}`,
-    webhook_url: `${baseUri}/pagaleve/webhook?storeId=${storeId}`
+    webhook_url: `${baseUri}/pagaleve/webhook?storeId=${storeId}`,
+    is_pix_upfront: isPix ? true : false
   }
 
   pagaleveTransaction.order = {
