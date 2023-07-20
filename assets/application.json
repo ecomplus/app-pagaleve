@@ -96,6 +96,18 @@
             "maximum": 99999999,
             "title": "Valor do desconto",
             "description": "Valor percentual ou fixo a ser descontado, dependendo to tipo configurado"
+          },
+          "account_deposit": {
+            "type": "boolean",
+            "default": true,
+            "title": "Desconto no Pix",
+            "description": "Habilitar desconto com Pix"
+          },
+          "payment_link": {
+            "type": "boolean",
+            "default": true,
+            "title": "Desconto no Pix Parcelado",
+            "description": "Habilitar desconto com Pix Parcelado"
           }
         },
         "title": "Desconto",
@@ -103,24 +115,15 @@
       },
       "hide": false
     },
-    "min_amount": {
-      "schema": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 99999999,
-        "default": 1,
-        "title": "Mínimo para mostrar formas de pagamento"
-      },
-      "hide": true
-    },
     "payment_link": {
       "schema": {
+        "title": "Configurações adicionais",
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "disable": {
             "type": "boolean",
-            "default": true,
+            "default": false,
             "title": "Desabilitar link de pagamento",
             "description": "Desabilitar pagamento com link de pagamento"
           },
@@ -143,9 +146,65 @@
             "format": "uri",
             "title": "Ícone",
             "description": "Ícone customizado para a forma de pagamento, URL da imagem"
+          },
+          "min_amount": {
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 99999999,
+              "default": 1,
+              "title": "Mínimo para mostrar formas de pagamento"
+            },
+            "hide": true
           }
         },
+        "description": "Configurações adicionais para forma de pagamento via Pagaleve"
+      },
+      "hide": false
+    },
+    "account_deposit": {
+      "schema": {
         "title": "Configurações adicionais",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "disable": {
+            "type": "boolean",
+            "default": true,
+            "title": "Desabilitar pix a vista",
+            "description": "Desabilitar pagamento com pix a vista"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Rótulo",
+            "description": "Nome da forma de pagamento exibido para os clientes",
+            "default": "Pagar com Pix"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 1000,
+            "title": "Descrição",
+            "description": "Texto auxiliar sobre a forma de pagamento, pode conter tags HTML"
+          },
+          "icon": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "uri",
+            "title": "Ícone",
+            "description": "Ícone customizado para a forma de pagamento, URL da imagem"
+          },
+          "min_amount": {
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 99999999,
+              "default": 1,
+              "title": "Mínimo para mostrar formas de pagamento"
+            },
+            "hide": true
+          }
+        },
         "description": "Configurações adicionais para forma de pagamento via Pagaleve"
       },
       "hide": false
