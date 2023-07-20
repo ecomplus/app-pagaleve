@@ -43,14 +43,58 @@ exports.post = async ({ appSdk }, req, res) => {
   }
 
   const { discount } = appData
+  if (discount && discount.value) {
+    if (discount.apply_at !== 'freight') {
+      // default discount option
+      const { value } = discount
+      response.discount_option = {
+        label: config.discount_option_label,
+        value
+      }
+      // specify the discount type and min amount is optional
+      ;['type', 'min_amount'].forEach(prop => {
+        if (discount[prop]) {
+          response.discount_option[prop] = discount[prop]
+        }
+      })
+    }
+
+    if (amount.total) {
+      // check amount value to apply discount
+      if (amount.total < discount.min_amount) {
+        discount.value = 0
+      } else {
+        delete discount.min_amount
+
+        // fix local amount object
+        const maxDiscount = amount[discount.apply_at || 'subtotal']
+        let discountValue
+        if (discount.type === 'percentage') {
+          discountValue = maxDiscount * discount.value / 100
+        } else {
+          discountValue = discount.value
+          if (discountValue > maxDiscount) {
+            discountValue = maxDiscount
+          }
+        }
+        if (discountValue) {
+          amount.discount = (amount.discount || 0) + discountValue
+          amount.total -= discountValue
+          if (amount.total < 0) {
+            amount.total = 0
+          }
+        }
+      }
+    }
+  }
   
-  const minAmount = (appData.min_amount || 1)
   
-  const listPaymentMethods = ['payment_link']
+  const listPaymentMethods = ['payment_link', 'account_deposit']
   // setup payment gateway object
   listPaymentMethods.forEach(paymentMethod => {
     const isLinkPayment = paymentMethod === 'payment_link'
     const methodConfig = (appData[paymentMethod] || {})
+    const minAmount = (methodConfig.min_amount || 1)
 
     let validateAmount = false
     if (amount.total && minAmount) {
@@ -59,9 +103,11 @@ exports.post = async ({ appSdk }, req, res) => {
 
     // Workaround for showcase
     const validatePayment = amount.total ? validateAmount : true
+    const methodEnable = !methodConfig.disable
 
-    if (validatePayment) {
-      const label = methodConfig.label || 'Link de Pagamento'
+    if (validatePayment && methodEnable) {
+      const label = methodConfig.label || (isLinkPayment ? 'Pix Parcelado' : 'Pagar com Pix')
+      
 
       const gateway = {
         label,
@@ -75,20 +121,14 @@ exports.post = async ({ appSdk }, req, res) => {
       }
       console.log('>>> test:', JSON.stringify(gateway))
 
-      if (discount && discount.value > 0) {
-        if (discount.apply_at !== 'freight') {
-          // default discount option
-          const { value } = discount
-          response.discount_option = {
-            label,
-            value
-          }
-          // specify the discount type and min amount is optional
-          ;['type', 'min_amount'].forEach(prop => {
-            if (discount[prop]) {
-              response.discount_option[prop] = discount[prop]
-            }
-          })
+      // check available discount by payment method
+      if ((discount && discount.value && discount[paymentMethod] !== false)) {
+        gateway.discount = {}
+        ;['apply_at', 'type', 'value'].forEach(field => {
+          gateway.discount[field] = discount[field]
+        })
+        if (response.discount_option && !response.discount_option.label) {
+          response.discount_option.label = label
         }
       }
       response.payment_gateways.push(gateway)
