@@ -7,7 +7,7 @@
 
 const app = {
   app_id: 113537,
-  title: 'Pagaleve Pix Parcelado',
+  title: 'Pagaleve',
   slug: 'pagaleve-pix-parcelado',
   type: 'external',
   state: 'active',
