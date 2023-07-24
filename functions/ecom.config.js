@@ -256,8 +256,7 @@ const app = {
             hide: true
           }
         },
-        title: 'Configurações adicionais',
-        description: 'Configurações adicionais para forma de pagamento via Pagaleve'
+        description: 'Configurações adicionais para Pix Parcelado'
       },
       hide: false
     },
@@ -304,8 +303,7 @@ const app = {
             hide: true
           }
         },
-        title: 'Configurações adicionais',
-        description: 'Configurações adicionais para forma de pagamento via Pagaleve'
+        description: 'Configurações adicionais para Pix à vista'
       },
       hide: false
     }
