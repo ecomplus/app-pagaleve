@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0 (2023-07-24)
+
+
+### Bug Fixes
+
+* **create-transaction:** set enconded url and new image product ([d18024a](https://github.com/ecomplus/application-starter/commit/d18024a2084bf92149f2a09526d0a54ebad2825f))
+* **create-transaction:** set new url from item ([1238447](https://github.com/ecomplus/application-starter/commit/12384472d9d67173c94090591f6df487c7f8ac88))
+* **webhook:** set right path create access ([15bd907](https://github.com/ecomplus/application-starter/commit/15bd907861f3d057128405e2a72735ae669bb7b7))
+
 ## [1.0.0-starter.26](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.25...v1.0.0-starter.26) (2022-02-24)
 
 ## [1.0.0-starter.25](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.24...v1.0.0-starter.25) (2022-02-24)
