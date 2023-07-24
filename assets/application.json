@@ -117,7 +117,7 @@
     },
     "payment_link": {
       "schema": {
-        "title": "Configurações adicionais",
+        "title": "Pix parcelado",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -158,13 +158,13 @@
             "hide": true
           }
         },
-        "description": "Configurações adicionais para forma de pagamento via Pagaleve"
+        "description": "Configurações adicionais para Pix Parcelado"
       },
       "hide": false
     },
     "account_deposit": {
       "schema": {
-        "title": "Configurações adicionais",
+        "title": "Pix à vista",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -205,7 +205,7 @@
             "hide": true
           }
         },
-        "description": "Configurações adicionais para forma de pagamento via Pagaleve"
+        "description": "Configurações adicionais para Pix à vista"
       },
       "hide": false
     }
