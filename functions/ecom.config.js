@@ -216,6 +216,7 @@ const app = {
     payment_link: {
       schema: {
         title: 'Pix parcelado',
+        description: 'Configurações adicionais para Pix Parcelado',
         type: 'object',
         additionalProperties: false,
         properties: {
@@ -255,14 +256,14 @@ const app = {
             },
             hide: true
           }
-        },
-        description: 'Configurações adicionais para Pix Parcelado'
+        }
       },
       hide: false
     },
     account_deposit: {
       schema: {
         title: 'Pix à vista',
+        description: 'Configurações adicionais para Pix à vista',
         type: 'object',
         additionalProperties: false,
         properties: {
@@ -302,8 +303,7 @@ const app = {
             },
             hide: true
           }
-        },
-        description: 'Configurações adicionais para Pix à vista'
+        }
       },
       hide: false
     }

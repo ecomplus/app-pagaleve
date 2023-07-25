@@ -126,11 +126,14 @@ exports.post = ({ appSdk, admin }, req, res) => {
     })
     .then(({ data }) => {
       console.log('>> Created transaction <<', JSON.stringify(data))
-      if (!isPix) {
-        transactionLink.payment_link = data.redirect_url || data.checkout_url
+      transactionLink.payment_link = data.redirect_url || data.checkout_url
+      if (isPix && data.timestamp) {
+        transactionLink.account_deposit = {
+          valid_thru: data.timestamp
+        }  
       }
       res.send({
-        redirect_to_payment: !isPix ? true : false,
+        redirect_to_payment: true,
         transaction: transactionLink
       })
     })
