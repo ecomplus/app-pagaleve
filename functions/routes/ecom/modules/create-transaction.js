@@ -21,7 +21,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
   // merge all app options configured by merchant
   const appData = Object.assign({}, application.data, application.hidden_data)
 
-  const isSandbox = true
+  const isSandbox = false
 
   // create access with axios
   const pagaleveAxios = new PagaLeveAxios(appData.username, appData.password, isSandbox, storeId)
