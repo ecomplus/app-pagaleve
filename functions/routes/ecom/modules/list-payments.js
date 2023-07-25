@@ -1,4 +1,6 @@
 const axios = require('axios')
+
+const { baseUri } = require('../../../__env')
 exports.post = async ({ appSdk }, req, res) => {
   /**
    * Requests coming from Modules API have two object properties on body: `params` and `application`.
@@ -118,6 +120,13 @@ exports.post = async ({ appSdk }, req, res) => {
           name: `${label} - ${intermediator.name} `
         },
         intermediator
+      }
+      if (!gateway.icon ) {
+        if (isLinkPayment) {
+          gateway.icon = `${baseUri}/pagaleve-parcelado.png`
+        } else {
+          gateway.icon = `${baseUri}/pagaleve-pix.png`
+        }
       }
       console.log('>>> test:', JSON.stringify(gateway))
 
