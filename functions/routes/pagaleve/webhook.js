@@ -96,7 +96,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
                       let body = {
                         checkout_id: id,
                         currency: 'BRL',
-                        amount: amount * 100,
+                        amount,
                         intent: 'CAPTURE'
                       }
                       console.log('> SendPayment Pagaleve: ', JSON.stringify(body), ' <<')

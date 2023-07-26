@@ -74,7 +74,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
       amount: Math.floor(finalFreight) || 0,
       address: parseAddress(to)
     },
-    amount: Math.floor(finalAmount),
+    amount: Math.floor(finalAmount) * 100,
     items: [],
     timestamp: new Date().toISOString(),
     type: 'ORDINARY'
