@@ -89,7 +89,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
             if (state.toLowerCase() === 'authorized') {
               getAppData({ appSdk, storeId, auth })
                 .then(appData => {
-                  const pagaleveAxios = new PagaLeveAxios(appData.username, appData.password, true, storeId)
+                  const pagaleveAxios = new PagaLeveAxios(appData.username, appData.password, false, storeId)
                   pagaleveAxios.preparing
                     .then(() => {
                       const { axios } = pagaleveAxios
