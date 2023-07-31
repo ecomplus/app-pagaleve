@@ -46,8 +46,8 @@ exports.post = ({ appSdk, admin }, req, res) => {
   }
 
   console.log('> Transaction #', storeId, orderId)
-  const finalAmount = amount.total
-  const finalFreight = amount.freight
+  const finalAmount = Math.floor(amount.total * 100)
+  const finalFreight = Math.floor(amount.freight * 100)
 
   const parseAddress = to => ({
     name: to.name,
@@ -71,10 +71,10 @@ exports.post = ({ appSdk, admin }, req, res) => {
     reference: orderId,
     description: `Order from E-Com Plus ${orderNumber}`,
     shipping: {
-      amount: Math.floor(finalFreight) || 0,
+      amount: finalFreight || 0,
       address: parseAddress(to)
     },
-    amount: Math.floor(finalAmount) * 100,
+    amount: finalAmount,
     items: [],
     timestamp: new Date().toISOString(),
     type: 'ORDINARY'
@@ -87,7 +87,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
         name: item.name || item.sku,
         sku: item.sku,
         quantity: item.quantity,
-        price: Math.floor((item.final_price || item.price)),
+        price: Math.floor((item.final_price || item.price) * 100),
         url: `https://${params.domain}`,
         reference: item.product_id,
         image: objImg && objImg.url ? objImg.url : `https://${params.domain}`
