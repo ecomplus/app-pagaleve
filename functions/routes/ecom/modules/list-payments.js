@@ -49,7 +49,7 @@ exports.post = async ({ appSdk }, req, res) => {
       // default discount option
       const { value } = discount
       response.discount_option = {
-        label: 'Discount in payment',
+        label: 'Pix',
         value
       }
       // specify the discount type and min amount is optional
