@@ -94,7 +94,7 @@ exports.post = async ({ appSdk }, req, res) => {
   listPaymentMethods.forEach(paymentMethod => {
     const isLinkPayment = paymentMethod === 'payment_link'
     const methodConfig = (appData[paymentMethod] || {})
-    const minAmount = (methodConfig.min_amount || 1)
+    const minAmount = Number(methodConfig.min_amount || 1)
 
     let validateAmount = false
     if (amount.total && minAmount >= 0) {

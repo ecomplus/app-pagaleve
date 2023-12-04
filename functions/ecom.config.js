@@ -295,7 +295,7 @@ const app = {
             minimum: 0,
             maximum: 99999999,
             default: 1,
-            title: 'Mínimo para mostrar formas de pagamento'
+            title: 'Mínimo para mostrar forma de pagamento'
           }
         }
       },
