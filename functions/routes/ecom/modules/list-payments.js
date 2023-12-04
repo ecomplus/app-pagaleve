@@ -88,8 +88,7 @@ exports.post = async ({ appSdk }, req, res) => {
       }
     }
   }
-  
-  
+
   const listPaymentMethods = ['payment_link', 'account_deposit']
   // setup payment gateway object
   listPaymentMethods.forEach(paymentMethod => {
@@ -98,7 +97,7 @@ exports.post = async ({ appSdk }, req, res) => {
     const minAmount = (methodConfig.min_amount || 1)
 
     let validateAmount = false
-    if (amount.total && minAmount) {
+    if (amount.total && minAmount >= 0) {
       validateAmount = amount.total >= minAmount
     }
 
@@ -108,7 +107,6 @@ exports.post = async ({ appSdk }, req, res) => {
 
     if (validatePayment && methodEnable) {
       const label = methodConfig.label || (isLinkPayment ? 'Pix Parcelado' : 'Pagar com Pix')
-      
 
       const gateway = {
         label,

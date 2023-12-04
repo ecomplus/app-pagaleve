@@ -223,8 +223,8 @@ const app = {
           disable: {
             type: 'boolean',
             default: false,
-            title: 'Desabilitar link de pagamento',
-            description: 'Desabilitar pagamento com link de pagamento'
+            title: 'Desabilitar pix parcelado',
+            description: 'Desabilitar pagamento com pix parcelado'
           },
           label: {
             type: 'string',
@@ -247,14 +247,11 @@ const app = {
             description: 'Ícone customizado para a forma de pagamento, URL da imagem'
           },
           min_amount: {
-            schema: {
-              type: 'number',
-              minimum: 0,
-              maximum: 99999999,
-              default: 1,
-              title: 'Mínimo para mostrar formas de pagamento'
-            },
-            hide: true
+            type: 'number',
+            minimum: 0,
+            maximum: 99999999,
+            default: 1,
+            title: 'Mínimo para mostrar formas de pagamento'
           }
         }
       },
@@ -294,14 +291,11 @@ const app = {
             description: 'Ícone customizado para a forma de pagamento, URL da imagem'
           },
           min_amount: {
-            schema: {
-              type: 'number',
-              minimum: 0,
-              maximum: 99999999,
-              default: 1,
-              title: 'Mínimo para mostrar formas de pagamento'
-            },
-            hide: true
+            type: 'number',
+            minimum: 0,
+            maximum: 99999999,
+            default: 1,
+            title: 'Mínimo para mostrar formas de pagamento'
           }
         }
       },
