@@ -79,9 +79,10 @@ exports.post = ({ appSdk, admin }, req, res) => {
     timestamp: new Date().toISOString(),
     type: 'ORDINARY'
   }
-
+  let totalQuantity = 0
   items.forEach(item => {
     if (item.quantity > 0) {
+      totalQuantity += item.quantity
       const objImg = ecomUtils.img(item)
       pagaleveTransaction.order.items.push({
         name: item.name || item.sku,
@@ -111,7 +112,8 @@ exports.post = ({ appSdk, admin }, req, res) => {
       birthDate.day.toString().padStart(2, '0')
   }
 
-  pagaleveAxios.preparing
+  if (totalQuantity > 0) {
+    pagaleveAxios.preparing
     .then(() => {
       const { axios } = pagaleveAxios
       console.log('> SendTransaction Pagaleve: ', JSON.stringify(pagaleveTransaction), ' <<')
@@ -164,4 +166,11 @@ exports.post = ({ appSdk, admin }, req, res) => {
         message
       })
     })
+  } else {
+    res.status(409)
+      res.send({
+        error: 400,
+        message: 'Não há itens disponíveis no pedido'
+      })
+  }
 }
