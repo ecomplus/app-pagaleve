@@ -134,6 +134,12 @@ exports.post = ({ appSdk, admin }, req, res) => {
           valid_thru: data.timestamp
         }  
       }
+      if (data.id) {
+        transactionLink.intermediator = {
+          transaction_id: data.id,
+          transaction_code: data.id
+        }
+      }
       res.send({
         redirect_to_payment: true,
         transaction: transactionLink
