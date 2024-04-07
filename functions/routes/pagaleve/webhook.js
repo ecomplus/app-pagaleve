@@ -22,6 +22,7 @@ const parseStatusToEcom = (pagaleveTransactionStatus) => {
 
     case 'authorized':
     case 'completed':
+    case 'paid':
       return 'paid'
 
     case 'expired':
@@ -86,17 +87,19 @@ exports.post = ({ appSdk, admin }, req, res) => {
                   console.log('updated order', order._id)
                 }
                 if (state && state.toLowerCase() === 'paid') {
-                  const pagalevePayment = {
-                    checkout_id: id,
-                    currency: 'BRL',
+                  console.log('> SendPayment Pagaleve: ', JSON.stringify({
+                    'checkout_id': id,
+                    'currency': 'BRL',
                     amount,
-                    intent: 'CAPTURE'
-                  }
-                  console.log('> SendPayment Pagaleve: ', JSON.stringify(pagalevePayment), ' <<')
+                    'intent': 'CAPTURE'
+                  }), ' <<')
                   // https://axios-http.com/ptbr/docs/req_config
                   
                   return axios.post('/v1/payments', {
-                    body:pagalevePayment
+                    'checkout_id': id,
+                    'currency': 'BRL',
+                    amount,
+                    'intent': 'CAPTURE'
                   }, { 
                     maxRedirects: 0,
                     validateStatus
