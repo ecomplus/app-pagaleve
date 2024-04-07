@@ -59,7 +59,7 @@ exports.post = ({ appSdk, admin }, req, res) => {
           return axios.get(`/v1/purchase-requests/${id}`, {
             maxRedirects: 0,
             validateStatus
-          }).then(({ data }) => {
+          }).then(async ({ data }) => {
             console.log('>> Get payment status <<', JSON.stringify(data))
             const state = data.status
             const order = await findOrderById(appSdk, storeId, auth, orderReference)
