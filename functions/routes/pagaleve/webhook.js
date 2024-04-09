@@ -27,6 +27,7 @@ const parseStatusToEcom = (pagaleveTransactionStatus) => {
 
     case 'expired':
     case 'declined':
+    case 'cancelled':
     case 'abandoned':
     case 'canceled':
       return 'voided'
